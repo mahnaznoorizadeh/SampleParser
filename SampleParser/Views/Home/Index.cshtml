@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Add more rows</h2>
+
+        <form class="form-horizontal">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="bank_transaction">Bank transactions: </label>
+                    <textarea class="form-control col-sm-10" rows="5" name="bank_transaction" id="bank_transaction" style="width:60%;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="automatic" id="lbl_automatic">Automatic: </label>
+                    <input type="checkbox" name="automatic" id="automatic" />
+                </div>
+            </div>
+            <div id="manual_row">
+                <h4>Set header manually:</h4>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="date_of_payment">Date of payment: </label>
+                        <input class="form-control" type="number" name="date_of_payment" id="date_of_payment" min="1" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="Description">Description: </label>
+                        <input class="form-control" type="number" name="Description" id="Description" min="1" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="sum">Sum: </label>
+                        <input class="form-control" type="number" name="sum" id="sum" min="1" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="Balance">Balance: </label>
+                        <input class="form-control" type="number" name="Balance" id="balance" min="1" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2"></label>
+                <button type="button" id="save" class="btn btn-primary">Save</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+
+    $("#lbl_automatic, #automatic").click(function () {
+        if ($("#automatic").is(":checked"))
+            $("#manual_row").hide();
+        else
+            $("#manual_row").show();
+    });
+
+    $("#save").click(function () {
+        var form_data = {};
+        form_data["BankTransaction"] = $("#bank_transaction").val();
+        form_data["Automatic"] = $("#automatic").is(":checked");
+
+        if (!form_data["Automatic"]) {
+
+            if ($("#date_of_payment").val().trim() == "" ||
+                $("#Description").val().trim() == "" ||
+                $("#sum").val().trim() == "" ||
+                $("#balance").val().trim() == "")
+            {
+                return alert("Please fill all boxes.");
+            }
+
+            form_data["DateOfPayment"] = $("#date_of_payment").val();
+            form_data["Description"] = $("#Description").val();
+            form_data["Sum"] = $("#sum").val();
+            form_data["Balance"] = $("#balance").val();
+
+        }
+
+        $.ajax({
+            url: "Home/ParseData",
+            type: "POST",
+            data: form_data,
+            success: function (data, textStatus, jqXHR) {
+                //data - response from server
+                var _data = JSON.parse(data);
+
+                if (_data && _data.error)
+                {
+                    return alert("Error!");
+                }
+                else
+                {
+                    alert(data + " recordes added");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error!");
+            }
+        });
+    });
+
+</script>

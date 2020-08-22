@@ -1,0 +1,31 @@
+﻿@model List<SampleParser.ViewModel.PaymentViewModel>
+
+<h2>Payment List</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Date Of Payment</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Sum</th>
+                        <th scope="col">Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_body">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="col">@item.DateOfPayment</th>
+                            <th scope="col">@item.Description</th>
+                            <th scope="col">@item.Sum</th>
+                            <th scope="col">@item.Balance</th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
